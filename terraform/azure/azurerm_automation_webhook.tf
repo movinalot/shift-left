@@ -8,4 +8,10 @@ resource "azurerm_automation_webhook" "automation_webhook" {
   expiry_time             = each.value.expiry_time
   enabled                 = each.value.enabled
   runbook_name            = each.value.runbook_name
+
+  lifecycle {
+    ignore_changes = [
+      expiry_time
+    ]  
+  }
 }
