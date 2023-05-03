@@ -7,6 +7,12 @@ resource "azurerm_resource_group" "resource_group" {
   tags = {
     environment = local.environment_tag
   }
+
+  lifecycle {
+    ignore_changes = [
+      tags["CreatedOnDate"]
+    ]
+  }
 }
 
 data "azurerm_resource_group" "resource_group" {
