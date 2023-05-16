@@ -12,6 +12,6 @@ resource "azurerm_automation_webhook" "automation_webhook" {
   lifecycle {
     ignore_changes = [
       expiry_time
-    ]  
+    ]
   }
 }
