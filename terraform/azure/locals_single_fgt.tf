@@ -11,6 +11,10 @@ locals {
   username = var.username
   password = "Fortinet123#"
 
+  license_type  = "payg" # can be byol|flex - fortinet_fg-vm or payg - "fortinet_fg-vm_payg_2022"
+  license_file  = ""
+  license_token = ""
+
   environment_tag = "Terraform Single FortiGate"
 
   automation_accounts = {
@@ -107,14 +111,15 @@ locals {
     "fortigate" = {
       publisher = "fortinet"
       offer     = "fortinet_fortigate-vm_v5"
-      vm_size   = "Standard_DS2_v2"
-      version   = "latest"                   # can also be a version, e.g. 6.4.9, 7.0.6, 7.2.0, etc. latest is latest
-      sku       = "fortinet_fg-vm_payg_2022" # can be byol|flex - fortinet_fg-vm2 or payg - "fortinet_fg-vm_payg_2022"
+      vm_size   = "Standard_F4s_v2"
+      version   = "7.2.4" # can also be a version, e.g. 6.4.9, 7.0.6, 7.2.0, etc. latest is latest
+      sku       = local.license_type == "payg" ? "fortinet_fg-vm_payg_2022" : "fortinet_fg-vm"
+
     }
     "linux_vm" = {
       publisher = "Canonical"
       offer     = "UbuntuServer"
-      vm_size   = "Standard_F2"
+      vm_size   = "Standard_F2s_v2"
       version   = "latest"
       sku       = "16.04-LTS"
     }
@@ -402,14 +407,15 @@ locals {
       storage_data_disk_lun               = 0
       storage_data_disk_managed_disk_type = "Standard_LRS"
 
-      os_profile_admin_username           = local.username
-      os_profile_admin_password           = local.password
-      os_profile_custom_data              = "fgtvm.conf"
-      os_profile_custom_data_api_key      = random_string.string.id
-      os_profile_custom_data_type         = local.vm_image["fortigate"].sku
-      os_profile_custom_data_license_file = ""
+      os_profile_admin_username            = local.username
+      os_profile_admin_password            = local.password
+      os_profile_custom_data               = "fgtvm.conf"
+      os_profile_custom_data_api_key       = random_string.string.id
+      os_profile_custom_data_license_type  = local.license_type
+      os_profile_custom_data_license_file  = local.license_file
+      os_profile_custom_data_license_token = local.license_token
 
-      tags_ComputeType = "unknown"
+      tags_ComputeType = "ngfw"
     }
   }
 
