@@ -26,3 +26,5 @@
 - Creates an Automation Stitch that is triggered on the VMs with tag ComputeType=WebServer
 
 The Azure SDN Connector retrieved values may trigger the Automation Stitch to send a webhook to Azure Automation to execute the Runbook and the route ___rt-protected___ with a host route.
+
+1. Change the value of the ComputeType tag on Linux VM ___vm-linux-1___ to AppServer, WebServer, or DbServer. In 2-3 minutes a host route will be added to the route table rt-protected, ensuring that all traffic to the VM will traverse the FortiGate.
