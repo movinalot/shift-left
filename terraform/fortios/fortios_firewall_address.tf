@@ -3,8 +3,8 @@ resource "fortios_firewall_address" "firewall_address" {
 
   name = each.value.name
 
-  interface = each.value.interface
-  type      = each.value.type
-  sdn       = each.value.sdn
-  filter    = each.value.filter
+  associated_interface = each.value.associated_interface
+  type                 = each.value.type
+  sdn                  = each.value.sdn
+  filter               = each.value.filter
 }

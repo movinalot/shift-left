@@ -15,25 +15,25 @@ locals {
 
   firewall_addresses = {
     "AppServers" = {
-      name      = "AppServers"
-      interface = "port2"
-      type      = "dynamic"
-      sdn       = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
-      filter    = "Tag.ComputeType=AppServer"
+      name                 = "AppServers"
+      associated_interface = "port2"
+      type                 = "dynamic"
+      sdn                  = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
+      filter               = "Tag.ComputeType=AppServer"
     }
     "DbServers" = {
-      name      = "DbServers"
-      interface = "port2"
-      type      = "dynamic"
-      sdn       = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
-      filter    = "Tag.ComputeType=DbServer"
+      name                 = "DbServers"
+      associated_interface = "port2"
+      type                 = "dynamic"
+      sdn                  = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
+      filter               = "Tag.ComputeType=DbServer"
     }
     "WebServers" = {
-      name      = "WebServers"
-      interface = "port2"
-      type      = "dynamic"
-      sdn       = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
-      filter    = "Tag.ComputeType=WebServer"
+      name                 = "WebServers"
+      associated_interface = "port2"
+      type                 = "dynamic"
+      sdn                  = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
+      filter               = "Tag.ComputeType=WebServer"
     }
   }
 
