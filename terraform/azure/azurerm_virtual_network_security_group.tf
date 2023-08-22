@@ -6,3 +6,7 @@ resource "azurerm_network_security_group" "network_security_group" {
 
   name = each.value.name
 }
+
+output "network_security_groups" {
+  value = var.enable_output ? azurerm_network_security_group.network_security_group[*] : null
+}

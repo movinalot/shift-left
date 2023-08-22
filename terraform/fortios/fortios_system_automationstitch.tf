@@ -15,3 +15,7 @@ resource "fortios_system_automationstitch" "system_automationstitch" {
     }
   }
 }
+
+output "system_automationstitches" {
+  value = var.enable_output ? fortios_system_automationstitch.system_automationstitch[*] : null
+}

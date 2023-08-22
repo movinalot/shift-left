@@ -1,8 +1,9 @@
-variable "resource_group_name_suffix" {
+variable "username" {
+  default = "user01"
   type    = string
-  default = "fgt-as-workshop"
 }
 
-variable "username" {
-  type = string
+variable "enable_output" {
+  default = true
+  type    = bool
 }

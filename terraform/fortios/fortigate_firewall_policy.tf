@@ -49,3 +49,7 @@ resource "fortios_firewall_policy" "firewall_policy" {
     }
   }
 }
+
+output "firewall_policys" {
+  value = var.enable_output ? fortios_firewall_policy.firewall_policy[*] : null
+}

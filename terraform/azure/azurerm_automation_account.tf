@@ -11,3 +11,8 @@ resource "azurerm_automation_account" "automation_account" {
     type = each.value.identity_type
   }
 }
+
+output "automation_accounts" {
+  value = var.enable_output ? azurerm_automation_account.automation_account[*] : null
+  sensitive = true
+}

@@ -20,3 +20,7 @@ resource "fortios_system_automationtrigger" "system_automationtrigger" {
     }
   }
 }
+
+output "system_automationtriggers" {
+  value = var.enable_output ? fortios_system_automationtrigger.system_automationtrigger[*] : null
+}

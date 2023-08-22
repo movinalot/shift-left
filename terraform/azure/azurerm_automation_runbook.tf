@@ -14,3 +14,7 @@ resource "azurerm_automation_runbook" "automation_runbook" {
     uri = each.value.publish_content_link_uri
   }
 }
+
+output "automation_runbooks" {
+  value = var.enable_output ? azurerm_automation_runbook.automation_runbook[*] : null
+}

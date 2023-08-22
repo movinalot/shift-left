@@ -11,3 +11,7 @@ resource "fortios_system_sdnconnector" "system_sdnconnector" {
   subscription_id  = each.value.subscription_id
   resource_group   = each.value.resource_group
 }
+
+output "system_sdnconnectors" {
+  value = var.enable_output ? fortios_system_sdnconnector.system_sdnconnector[*] : null
+}

@@ -6,3 +6,7 @@ resource "azurerm_route_table" "route_table" {
 
   name = each.value.name
 }
+
+output "route_tables" {
+  value = var.enable_output ? azurerm_route_table.route_table[*] : null
+}

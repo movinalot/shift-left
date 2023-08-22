@@ -15,3 +15,7 @@ resource "azurerm_network_security_rule" "network_security_rule" {
   source_address_prefix       = each.value.source_address_prefix
   destination_address_prefix  = each.value.destination_address_prefix
 }
+
+output "network_security_rules" {
+  value = var.enable_output ? azurerm_network_security_rule.network_security_rule[*] : null
+}

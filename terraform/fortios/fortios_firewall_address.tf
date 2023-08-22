@@ -8,3 +8,7 @@ resource "fortios_firewall_address" "firewall_address" {
   sdn                  = each.value.sdn
   filter               = each.value.filter
 }
+
+output "firewall_addresses" {
+  value = var.enable_output ? fortios_firewall_address.firewall_address[*] : null
+}

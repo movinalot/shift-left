@@ -9,3 +9,7 @@ resource "azurerm_route" "route" {
   next_hop_type          = each.value.next_hop_type
   next_hop_in_ip_address = each.value.next_hop_in_ip_address
 }
+
+output "routes" {
+  value = var.enable_output ? azurerm_route.route[*] : null
+}

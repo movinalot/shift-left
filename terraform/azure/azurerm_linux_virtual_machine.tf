@@ -39,3 +39,8 @@ resource "azurerm_linux_virtual_machine" "linux_virtual_machine" {
     ComputeType = each.value.tags_ComputeType
   }
 }
+
+output "linux_virtual_machines" {
+  value = var.enable_output ? azurerm_linux_virtual_machine.linux_virtual_machine[*] : null
+  sensitive = true
+}

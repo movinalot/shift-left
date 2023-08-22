@@ -6,3 +6,7 @@ resource "fortios_router_static" "router_static" {
   gateway = each.value.gateway
   status  = each.value.status
 }
+
+output "router_statics" {
+  value = var.enable_output ? fortios_router_static.router_static[*] : null
+}

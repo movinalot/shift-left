@@ -33,3 +33,8 @@ variable "static_routes" {
   type    = map(any)
   default = {}
 }
+
+variable "enable_output" {
+  default = true
+  type    = bool
+}

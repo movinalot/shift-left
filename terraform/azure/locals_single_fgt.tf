@@ -1,6 +1,8 @@
 locals {
-  resource_group_exists        = true
-  resource_group_name_combined = "${local.username}-${var.resource_group_name_suffix}"
+  resource_group_exists      = false
+  resource_group_name_suffix = "fgt-as-workshop"
+
+  resource_group_name_combined = "${local.username}-${local.resource_group_name_suffix}"
 
   location = "eastus"
 
@@ -11,9 +13,9 @@ locals {
   username = var.username
   password = "Fortinet123#"
 
-  license_type  = "payg" # can be byol|flex - fortinet_fg-vm or payg - "fortinet_fg-vm_payg_2022"
+  license_type  = "flex" # can be byol|flex - fortinet_fg-vm or payg - "fortinet_fg-vm_payg_2022"
   license_file  = ""
-  license_token = ""
+  license_token = "DC411A1810904A2F8CB7"
 
   environment_tag = "Terraform Single FortiGate"
 

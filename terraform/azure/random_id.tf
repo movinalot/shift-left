@@ -5,3 +5,7 @@ resource "random_id" "id" {
 
   byte_length = 4
 }
+
+output "id" {
+  value = var.enable_output ? random_id.id.hex : null
+}

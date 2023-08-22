@@ -4,3 +4,7 @@ resource "azurerm_network_interface_security_group_association" "port1nsg" {
   network_interface_id      = each.value.network_interface_id
   network_security_group_id = each.value.network_security_group_id
 }
+
+output "network_interface_security_group_associations" {
+  value = var.enable_output ? azurerm_network_interface_security_group_association.port1nsg[*] : null
+}

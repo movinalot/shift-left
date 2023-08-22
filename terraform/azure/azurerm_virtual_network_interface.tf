@@ -21,3 +21,7 @@ resource "azurerm_network_interface" "network_interface" {
     }
   }
 }
+
+output "network_interfaces" {
+  value = var.enable_output ? azurerm_network_interface.network_interface[*] : null
+}

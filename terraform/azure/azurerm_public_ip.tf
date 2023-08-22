@@ -8,3 +8,7 @@ resource "azurerm_public_ip" "public_ip" {
   allocation_method = each.value.allocation_method
   sku               = each.value.sku
 }
+
+output "public_ips" {
+  value = var.enable_output ? azurerm_public_ip.public_ip[*] : null
+}

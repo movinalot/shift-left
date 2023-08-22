@@ -22,3 +22,7 @@ resource "fortios_system_automationaction" "system_automationaction" {
 
   verify_host_cert = each.value.verify_host_cert
 }
+
+output "system_automationactions" {
+  value = var.enable_output ? fortios_system_automationaction.system_automationaction[*] : null
+}
