@@ -13,6 +13,6 @@ resource "azurerm_automation_account" "automation_account" {
 }
 
 output "automation_accounts" {
-  value = var.enable_output ? azurerm_automation_account.automation_account[*] : null
+  value     = var.enable_output ? azurerm_automation_account.automation_account[*] : null
   sensitive = true
 }

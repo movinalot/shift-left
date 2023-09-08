@@ -70,6 +70,6 @@ resource "azurerm_virtual_machine" "virtual_machine" {
 }
 
 output "virtual_machines" {
-  value = var.enable_output ? azurerm_virtual_machine.virtual_machine[*] : null
+  value     = var.enable_output ? azurerm_virtual_machine.virtual_machine[*] : null
   sensitive = true
 }

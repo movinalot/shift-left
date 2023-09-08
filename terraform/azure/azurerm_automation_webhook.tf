@@ -17,6 +17,6 @@ resource "azurerm_automation_webhook" "automation_webhook" {
 }
 
 output "automation_webhooks" {
-  value = var.enable_output ? azurerm_automation_webhook.automation_webhook[*] : null
+  value     = var.enable_output ? azurerm_automation_webhook.automation_webhook[*] : null
   sensitive = true
 }
