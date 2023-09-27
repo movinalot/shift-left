@@ -14,4 +14,5 @@ resource "fortios_system_sdnconnector" "system_sdnconnector" {
 
 output "system_sdnconnectors" {
   value = var.enable_output ? fortios_system_sdnconnector.system_sdnconnector[*] : null
+  sensitive = true
 }

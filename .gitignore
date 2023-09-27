@@ -32,3 +32,4 @@ override.tf.json
 .vscode
 *.auto.tfvars
 fortigate_automation_action_cli.cfg
+fortios_vm-fgt.cfg

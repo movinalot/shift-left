@@ -4,6 +4,6 @@ variable "username" {
 }
 
 variable "enable_output" {
-  default = true
+  default = false
   type    = bool
 }

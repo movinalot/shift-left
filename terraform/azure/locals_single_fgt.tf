@@ -13,9 +13,9 @@ locals {
   username = var.username
   password = "Fortinet123#"
 
-  license_type  = "flex" # can be byol|flex - fortinet_fg-vm or payg - "fortinet_fg-vm_payg_2022"
+  license_type  = "payg" # can be byol|flex - fortinet_fg-vm or payg - "fortinet_fg-vm_payg_2022"
   license_file  = ""
-  license_token = "DC411A1810904A2F8CB7"
+  license_token = ""
 
   environment_tag = "Terraform Single FortiGate"
 
@@ -114,8 +114,8 @@ locals {
       publisher = "fortinet"
       offer     = "fortinet_fortigate-vm_v5"
       vm_size   = "Standard_F4s_v2"
-      version   = "7.2.4" # can also be a version, e.g. 6.4.9, 7.0.6, 7.2.0, etc. latest is latest
-      sku       = local.license_type == "payg" ? "fortinet_fg-vm_payg_2022" : "fortinet_fg-vm"
+      version   = "7.2.5" # can also be a version, e.g. 6.4.9, 7.0.6, 7.2.0, etc. latest is latest
+      sku       = local.license_type == "payg" ? "fortinet_fg-vm_payg_2023" : "fortinet_fg-vm"
 
     }
     "linux_vm" = {
