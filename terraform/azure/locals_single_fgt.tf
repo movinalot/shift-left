@@ -1,6 +1,6 @@
 locals {
   resource_group_exists      = false
-  resource_group_name_suffix = "fgt-as-workshop"
+  resource_group_name_suffix = "fgt-single"
 
   resource_group_name_combined = "${local.username}-${local.resource_group_name_suffix}"
 
