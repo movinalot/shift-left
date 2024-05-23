@@ -10,7 +10,7 @@ resource:
 fail_pipeline:
   risk_rating: 8
 
-dast:
-  url: http://juice-shop.orangeysky.com:3000
+#dast:
+  #url: http://juice-shop.orangeysky.com:3000
   #fortipentest_scanner: true #true|false
-  full_scan: true #true|false
+  #full_scan: true #true|false
