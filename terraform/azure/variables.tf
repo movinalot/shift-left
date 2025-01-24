@@ -1,9 +1,14 @@
 variable "username" {
-  default = "user01"
+  default = ""
   type    = string
 }
 
 variable "enable_output" {
-  default = false
+  default = true
   type    = bool
+}
+
+variable "usertags" {
+  default = {}
+  type    = map(string)
 }

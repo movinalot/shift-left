@@ -51,11 +51,13 @@ resource "azurerm_virtual_machine" "virtual_machine" {
     admin_username = each.value.os_profile_admin_username
     admin_password = each.value.os_profile_admin_password
     custom_data = templatefile("${each.value.os_profile_custom_data}", {
-      hostname      = each.value.name
-      api_key       = each.value.os_profile_custom_data_api_key
-      license_type  = each.value.os_profile_custom_data_license_type
-      license_file  = each.value.os_profile_custom_data_license_file
-      license_token = each.value.os_profile_custom_data_license_token
+      hostname                     = each.value.name
+      api_key                      = each.value.os_profile_custom_data_api_key
+      license_type                 = each.value.os_profile_custom_data_license_type
+      license_file                 = each.value.os_profile_custom_data_license_file
+      license_token                = each.value.os_profile_custom_data_license_token
+      automation_stitch_action_uri = local.automation_stitch_action_uri
+      fortigate_access_token       = local.fortigate_access_token
     })
   }
 

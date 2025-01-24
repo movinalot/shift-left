@@ -2,10 +2,10 @@
 <#
     .DESCRIPTION
         A runbook which receives a webhook from FortiGate Automation
-        Stitch to add/removed microsegmentation route in routetable.
+        Stitch to add/removed micro-segmentation route in routetable.
     .NOTES
         AUTHOR: jmcdonough@fortinet.com
-        LAST EDIT: March 16, 2023
+        LAST EDIT: January 25, 2025
 #>
 
 param (

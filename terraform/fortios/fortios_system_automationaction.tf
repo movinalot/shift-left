@@ -24,6 +24,6 @@ resource "fortios_system_automationaction" "system_automationaction" {
 }
 
 output "system_automationactions" {
-  value = var.enable_output ? fortios_system_automationaction.system_automationaction[*] : null
+  value     = var.enable_output ? fortios_system_automationaction.system_automationaction[*] : null
   sensitive = true
 }

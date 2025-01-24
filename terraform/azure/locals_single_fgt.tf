@@ -10,14 +10,20 @@ locals {
   resource_group_location = local.resource_group_exists ? data.azurerm_resource_group.resource_group.0.location : azurerm_resource_group.resource_group.0.location
   resource_group_id       = local.resource_group_exists ? data.azurerm_resource_group.resource_group.0.id : azurerm_resource_group.resource_group.0.id
 
+  tags = var.usertags
+
   username = var.username
   password = "Fortinet123#"
 
-  license_type  = "payg" # can be byol|flex - fortinet_fg-vm or payg - "fortinet_fg-vm_payg_2022"
+  license_type  = "none" # can be none | byol | flex - fortinet_fg-vm or payg - "fortinet_fg-vm_payg_2023"
   license_file  = ""
   license_token = ""
 
   environment_tag = "Terraform Single FortiGate"
+
+  fortigate_ip_address         = azurerm_public_ip.public_ip["pip-fgt"].ip_address
+  fortigate_access_token       = "OY9d13FSnysfdMz49yaAELpNVoCKed"
+  automation_stitch_action_uri = "jmcdonough-fortiflexv2.azurewebsites.net/api/flexop"
 
   automation_accounts = {
     format("aa-%s", local.username) = {
@@ -41,7 +47,7 @@ locals {
       log_progress            = "true"
       runbook_type            = "PowerShell"
 
-      publish_content_link_uri = "https://raw.githubusercontent.com/FortinetSecDevOps/technical-recipe-azure-fgt-automation-stitch/main/PowerShell/Update-RouteTable.ps1"
+      publish_content_link_uri = "https://raw.githubusercontent.com/movinalot/shift-left/refs/heads/main/PowerShell/Update-RouteTable.ps1"
     }
   }
 
@@ -114,7 +120,7 @@ locals {
       publisher = "fortinet"
       offer     = "fortinet_fortigate-vm_v5"
       vm_size   = "Standard_F4s_v2"
-      version   = "7.2.5" # can also be a version, e.g. 6.4.9, 7.0.6, 7.2.0, etc. latest is latest
+      version   = "latest" # can also be a version, e.g. 6.4.9, 7.0.6, 7.2.0, etc. latest is latest
       sku       = local.license_type == "payg" ? "fortinet_fg-vm_payg_2023" : "fortinet_fg-vm"
 
     }
@@ -143,21 +149,21 @@ locals {
 
       name                 = "snet-external"
       virtual_network_name = azurerm_virtual_network.virtual_network["vnet-fgt"].name
-      address_prefixes     = [cidrsubnet(azurerm_virtual_network.virtual_network["vnet-fgt"].address_space[0], 8, 0)]
+      address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.virtual_network["vnet-fgt"].address_space)[0], 8, 0)]
     }
     "snet-internal" = {
       resource_group_name = local.resource_group_name
 
       name                 = "snet-internal"
       virtual_network_name = azurerm_virtual_network.virtual_network["vnet-fgt"].name
-      address_prefixes     = [cidrsubnet(azurerm_virtual_network.virtual_network["vnet-fgt"].address_space[0], 8, 1)]
+      address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.virtual_network["vnet-fgt"].address_space)[0], 8, 1)]
     }
     "snet-protected" = {
       resource_group_name = local.resource_group_name
 
       name                 = "snet-protected"
       virtual_network_name = azurerm_virtual_network.virtual_network["vnet-fgt"].name
-      address_prefixes     = [cidrsubnet(azurerm_virtual_network.virtual_network["vnet-fgt"].address_space[0], 8, 2)]
+      address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.virtual_network["vnet-fgt"].address_space)[0], 8, 2)]
     }
   }
 
@@ -166,9 +172,9 @@ locals {
       resource_group_name = local.resource_group_name
       location            = local.location
 
-      name                          = "nic-fgt-port1"
-      enable_ip_forwarding          = true
-      enable_accelerated_networking = true
+      name                           = "nic-fgt-port1"
+      ip_forwarding_enabled          = true
+      accelerated_networking_enabled = true
 
       ip_configurations = [
         {
@@ -185,9 +191,9 @@ locals {
       resource_group_name = local.resource_group_name
       location            = local.location
 
-      name                          = "nic-fgt-port2"
-      enable_ip_forwarding          = true
-      enable_accelerated_networking = true
+      name                           = "nic-fgt-port2"
+      ip_forwarding_enabled          = true
+      accelerated_networking_enabled = true
 
       ip_configurations = [
         {
@@ -204,9 +210,9 @@ locals {
       resource_group_name = local.resource_group_name
       location            = local.location
 
-      name                          = "nic-linux-1-eth1"
-      enable_ip_forwarding          = false
-      enable_accelerated_networking = false
+      name                           = "nic-linux-1-eth1"
+      ip_forwarding_enabled          = false
+      accelerated_networking_enabled = false
 
       ip_configurations = [
         {
@@ -223,9 +229,9 @@ locals {
       resource_group_name = local.resource_group_name
       location            = local.location
 
-      name                          = "nic-linux-2-eth1"
-      enable_ip_forwarding          = false
-      enable_accelerated_networking = false
+      name                           = "nic-linux-2-eth1"
+      ip_forwarding_enabled          = false
+      accelerated_networking_enabled = false
 
       ip_configurations = [
         {
@@ -409,10 +415,11 @@ locals {
       storage_data_disk_lun               = 0
       storage_data_disk_managed_disk_type = "Standard_LRS"
 
-      os_profile_admin_username            = local.username
-      os_profile_admin_password            = local.password
-      os_profile_custom_data               = "fgtvm.conf"
-      os_profile_custom_data_api_key       = random_string.string.id
+      os_profile_admin_username = local.username
+      os_profile_admin_password = local.password
+      os_profile_custom_data    = "fgtvm.conf"
+      #os_profile_custom_data_api_key       = random_string.string.id
+      os_profile_custom_data_api_key       = "OY9d13FSnysfdMz49yaAELpNVoCKed"
       os_profile_custom_data_license_type  = local.license_type
       os_profile_custom_data_license_file  = local.license_file
       os_profile_custom_data_license_token = local.license_token

@@ -55,10 +55,12 @@ resource "local_sensitive_file" "tempalte_file" {
   for_each = local.virtual_machines
   filename = format("../fortios/fortios_%s.cfg", each.value.name)
   content = templatefile("${each.value.os_profile_custom_data}", {
-    hostname      = each.value.name
-    api_key       = each.value.os_profile_custom_data_api_key
-    license_type  = each.value.os_profile_custom_data_license_type
-    license_file  = each.value.os_profile_custom_data_license_file
-    license_token = each.value.os_profile_custom_data_license_token
+    hostname                     = each.value.name
+    api_key                      = each.value.os_profile_custom_data_api_key
+    license_type                 = each.value.os_profile_custom_data_license_type
+    license_file                 = each.value.os_profile_custom_data_license_file
+    license_token                = each.value.os_profile_custom_data_license_token
+    automation_stitch_action_uri = local.automation_stitch_action_uri
+    fortigate_access_token       = local.fortigate_access_token
   })
 }
