@@ -8,7 +8,7 @@ variable "enable_output" {
   type    = bool
 }
 
-variable "usertags" {
+variable "tags" {
   default = {}
   type    = map(string)
 }

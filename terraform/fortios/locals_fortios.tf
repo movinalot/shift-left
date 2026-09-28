@@ -39,6 +39,9 @@ locals {
 
   firewall_policys = {
     "webserver2webserver" = {
+
+      policyid = 1
+
       name = "webser2webserver"
 
       action     = "accept"

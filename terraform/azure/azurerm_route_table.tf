@@ -5,6 +5,8 @@ resource "azurerm_route_table" "route_table" {
   location            = each.value.location
 
   name = each.value.name
+
+  depends_on = [azurerm_network_interface.network_interface, azurerm_subnet.subnet]
 }
 
 output "route_tables" {

@@ -1,6 +1,8 @@
 resource "fortios_firewall_policy" "firewall_policy" {
   for_each = local.firewall_policys
 
+  policyid = each.value.policyid
+
   name = each.value.name
 
   action     = each.value.action

@@ -1,13 +1,13 @@
 locals {
   fortigate_vars = format(
-    "%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = { \"%s\" = { device = \"%s\", dst = \"%s\", gateway = \"%s\", status = \"%s\" } }",
+    "%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = \"%s\"\n%s = { \"%s\" = { device = \"%s\", dst = \"%s\", gateway = \"%s\", status = \"%s\", seq_num = \"%s\" } }",
     "fortigate_api_token ", random_string.string.id,
     "fortigate_ip_or_fqdn", azurerm_public_ip.public_ip["pip-fgt"].ip_address,
     "resource_group_name ", local.resource_group_name,
     "route_table_name    ", azurerm_route_table.route_table["rt-protected"].name,
     "next_hop_ip         ", azurerm_network_interface.network_interface["nic-fgt-port2"].private_ip_address,
     "webhook             ", azurerm_automation_webhook.automation_webhook["Update-RouteTable_webhook"].uri,
-    "static_routes       ", "protected", "port2", azurerm_subnet.subnet["snet-protected"].address_prefixes[0], cidrhost(azurerm_subnet.subnet["snet-internal"].address_prefixes[0], 1), "enable"
+    "static_routes       ", "protected", "port2", azurerm_subnet.subnet["snet-protected"].address_prefixes[0], cidrhost(azurerm_subnet.subnet["snet-internal"].address_prefixes[0], 1), "enable", "1"
   )
 }
 
@@ -51,7 +51,7 @@ end
 EOT
 }
 
-resource "local_sensitive_file" "tempalte_file" {
+resource "local_sensitive_file" "template_file" {
   for_each = local.virtual_machines
   filename = format("../fortios/fortios_%s.cfg", each.value.name)
   content = templatefile("${each.value.os_profile_custom_data}", {
@@ -61,6 +61,6 @@ resource "local_sensitive_file" "tempalte_file" {
     license_file                 = each.value.os_profile_custom_data_license_file
     license_token                = each.value.os_profile_custom_data_license_token
     automation_stitch_action_uri = local.automation_stitch_action_uri
-    fortigate_access_token       = local.fortigate_access_token
+    fortigate_access_token       = random_string.string.id
   })
 }

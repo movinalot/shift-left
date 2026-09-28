@@ -5,6 +5,7 @@ resource "fortios_router_static" "router_static" {
   dst     = each.value.dst
   gateway = each.value.gateway
   status  = each.value.status
+  seq_num = each.value.seq_num
 }
 
 output "router_statics" {
