@@ -1,4 +1,6 @@
 locals {
+  server_roles = ["AppServer", "DbServer", "WebServer"]
+
   sdn_connectors = {
     "AzureSDN" = {
       name = "AzureSDN"
@@ -14,32 +16,17 @@ locals {
   }
 
   firewall_addresses = {
-    "AppServers" = {
-      name                 = "AppServers"
+    for role in local.server_roles : "${role}s" => {
+      name                 = "${role}s"
       associated_interface = "port2"
       type                 = "dynamic"
       sdn                  = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
-      filter               = "Tag.ComputeType=AppServer"
-    }
-    "DbServers" = {
-      name                 = "DbServers"
-      associated_interface = "port2"
-      type                 = "dynamic"
-      sdn                  = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
-      filter               = "Tag.ComputeType=DbServer"
-    }
-    "WebServers" = {
-      name                 = "WebServers"
-      associated_interface = "port2"
-      type                 = "dynamic"
-      sdn                  = fortios_system_sdnconnector.system_sdnconnector["AzureSDN"].name
-      filter               = "Tag.ComputeType=WebServer"
+      filter               = "Tag.ComputeType=${role}"
     }
   }
 
   firewall_policys = {
     "webserver2webserver" = {
-
       policyid = 1
 
       name = "webser2webserver"
@@ -50,120 +37,29 @@ locals {
       status     = "enable"
       schedule   = "always"
 
-      srcintf = [
-        {
-          name = "port2"
-        }
-      ]
-
-      dstintf = [
-        {
-          name = "port2"
-        }
-      ]
-
-      srcaddr = [
-        {
-          name = fortios_firewall_address.firewall_address["WebServers"].name
-        }
-      ]
-
-      dstaddr = [
-        {
-          name = fortios_firewall_address.firewall_address["WebServers"].name
-        }
-      ]
-
-      service = [
-        {
-          name = "ALL"
-        }
-      ]
+      srcintf = [{ name = "port2" }]
+      dstintf = [{ name = "port2" }]
+      srcaddr = [{ name = fortios_firewall_address.firewall_address["WebServers"].name }]
+      dstaddr = [{ name = fortios_firewall_address.firewall_address["WebServers"].name }]
+      service = [{ name = "ALL" }]
     }
   }
 
   http_headers = [
-    {
-      key   = "ResourceGroupName"
-      value = var.resource_group_name
-    },
-    {
-      key   = "RouteTableName"
-      value = var.route_table_name
-    },
-    {
-      key   = "RouteNamePrefix"
-      value = "microseg"
-    },
-    {
-      key   = "NextHopIp"
-      value = var.next_hop_ip
-    }
+    { key = "ResourceGroupName", value = var.resource_group_name },
+    { key = "RouteTableName", value = var.route_table_name },
+    { key = "RouteNamePrefix", value = "microseg" },
+    { key = "NextHopIp", value = var.next_hop_ip },
   ]
 
   system_automationtriggers = {
-    "AppServer Existence" = {
-      name        = "AppServer Existence"
-      description = "Tag ComputeType with value of AppServer updates route table."
+    for role in local.server_roles : "${role} Existence" => {
+      name        = "${role} Existence"
+      description = "Tag ComputeType with value of ${role} updates route table."
       event_type  = "event-log"
 
-      logid_block = [
-        {
-          id = 53200
-        },
-        {
-          id = 53201
-        }
-      ]
-
-      fields = [
-        {
-          name  = "cfgobj"
-          value = "AppServers"
-        }
-      ]
-    }
-    "DbServer Existence" = {
-      name        = "DbServer Existence"
-      description = "Tag ComputeType with value of DbServer updates route table."
-      event_type  = "event-log"
-
-      logid_block = [
-        {
-          id = 53200
-        },
-        {
-          id = 53201
-        }
-      ]
-
-      fields = [
-        {
-          name  = "cfgobj"
-          value = "DbServers"
-        }
-      ]
-    }
-    "WebServer Existence" = {
-      name        = "WebServer Existence"
-      description = "Tag ComputeType with value of WebServer updates route table."
-      event_type  = "event-log"
-
-      logid_block = [
-        {
-          id = 53200
-        },
-        {
-          id = 53201
-        }
-      ]
-
-      fields = [
-        {
-          name  = "cfgobj"
-          value = "WebServers"
-        }
-      ]
+      logid_block = [{ id = 53200 }, { id = 53201 }]
+      fields      = [{ name = "cfgobj", value = "${role}s" }]
     }
   }
 
@@ -181,41 +77,14 @@ locals {
   }
 
   system_automationstitches = {
-    "routetableupdate-AppServers" = {
-      name        = "routetableupdate-AppServers"
-      description = "Update route table for App Servers"
+    for role in local.server_roles : "routetableupdate-${role}s" => {
+      name        = "routetableupdate-${role}s"
+      description = "Update route table for ${trimsuffix(role, "Server")} Servers"
       status      = "enable"
-      trigger     = fortios_system_automationtrigger.system_automationtrigger["AppServer Existence"].name
+      trigger     = fortios_system_automationtrigger.system_automationtrigger["${role} Existence"].name
 
       actions = [
-        {
-          action = fortios_system_automationaction.system_automationaction["routetableupdate"].name
-        }
-      ]
-    }
-    "routetableupdate-DbServers" = {
-      name        = "routetableupdate-DbServers"
-      description = "Update route table for Db Servers"
-      status      = "enable"
-      trigger     = fortios_system_automationtrigger.system_automationtrigger["DbServer Existence"].name
-
-
-      actions = [
-        {
-          action = fortios_system_automationaction.system_automationaction["routetableupdate"].name
-        }
-      ]
-    }
-    "routetableupdate-WebServers" = {
-      name        = "routetableupdate-WebServers"
-      description = "Update route table for Web Servers"
-      status      = "enable"
-      trigger     = fortios_system_automationtrigger.system_automationtrigger["WebServer Existence"].name
-
-      actions = [
-        {
-          action = fortios_system_automationaction.system_automationaction["routetableupdate"].name
-        }
+        { action = fortios_system_automationaction.system_automationaction["routetableupdate"].name }
       ]
     }
   }

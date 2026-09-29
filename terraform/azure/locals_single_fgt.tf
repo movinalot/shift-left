@@ -21,7 +21,6 @@ locals {
 
   environment_tag = "shift-left"
 
-  fortigate_ip_address         = azurerm_public_ip.public_ip["pip-fgt"].ip_address
   automation_stitch_action_uri = "jmcdonough-fortiflexv2.azurewebsites.net/api/flexop"
 
   automation_accounts = {
@@ -98,19 +97,6 @@ locals {
     "snet-protected" = {
       subnet_id      = azurerm_subnet.subnet["snet-protected"].id
       route_table_id = azurerm_route_table.route_table["rt-protected"].id
-    }
-  }
-
-  storage_accounts = {
-    format("st%s", local.username) = {
-      resource_group_name = local.resource_group_name
-      location            = local.location
-
-      name                     = substr(format("st%s", local.username), 0, 24)
-      account_replication_type = "LRS"
-      account_tier             = "Standard"
-
-      min_tls_version = "TLS1_2"
     }
   }
 
