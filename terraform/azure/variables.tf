@@ -3,6 +3,11 @@ variable "username" {
   type    = string
 }
 
+variable "password" {
+  default = ""
+  type    = string
+}
+
 variable "enable_output" {
   default = true
   type    = bool

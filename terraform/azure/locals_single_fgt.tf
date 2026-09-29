@@ -1,8 +1,8 @@
 locals {
   resource_group_exists      = false
-  resource_group_name_suffix = "rg-jmcdonough-shift-left"
+  resource_group_name_suffix = "shift-left"
 
-  resource_group_name_combined = "${local.username}-${local.resource_group_name_suffix}"
+  resource_group_name_combined = "rg-${local.username}-${local.resource_group_name_suffix}"
 
   location = "eastus"
 
@@ -13,16 +13,15 @@ locals {
   tags = var.tags
 
   username = var.username
-  password = "Fortinet123!"
+  password = var.password
 
   license_type  = "payg" # can be byol | flex | payg
   license_file  = ""
   license_token = ""
 
-  environment_tag = "Terraform Single FortiGate"
+  environment_tag = "shift-left"
 
   fortigate_ip_address         = azurerm_public_ip.public_ip["pip-fgt"].ip_address
-  #fortigate_access_token       = "OY9d13FSnysfdMz49yaAELpNVoCKed"
   automation_stitch_action_uri = "jmcdonough-fortiflexv2.azurewebsites.net/api/flexop"
 
   automation_accounts = {
